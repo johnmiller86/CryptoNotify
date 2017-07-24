@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.johnmillercoding.cryptonotify.activities.SettingsActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/verticalDivider">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:stretchColumns="*"
+            tools:ignore="UselessParent">
+            <TableRow
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_weight="2"
+                    android:text="@string/notifications"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </TableRow>
+            <TableRow
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <Switch
+                    android:id="@+id/allNotificationsSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/all_notifications" />
+
+                <Switch
+                    android:id="@+id/ethNotificationsSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/eth" />
+            </TableRow>
+            <TableRow
+                android:layout_width="0dp">
+
+                <Switch
+                    android:id="@+id/zecNotificationsSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/zec" />
+
+                <Switch
+                    android:id="@+id/ltcNotificationsSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/ltc"/>
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/verticalDivider"
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/verticalDivider">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:stretchColumns="*"
+            tools:ignore="UselessParent">
+            <TableRow
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_weight="3"
+                    android:text="@string/notify_me_when_price_drops_below"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </TableRow>
+            <TableRow
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/eth_threshold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:labelFor="@+id/ethThresholdEditText"/>
+                <EditText
+                    android:id="@+id/ethThresholdEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:layout_weight="1"/>
+
+                <Spinner
+                    android:id="@+id/ethThresholdCurrencySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/currencies"/>
+            </TableRow>
+            <TableRow
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/zec_threshold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:labelFor="@+id/zecThresholdEditText"/>
+                <EditText
+                    android:id="@+id/zecThresholdEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:layout_weight="1"/>
+
+                <Spinner
+                    android:id="@+id/zecThresholdCurrencySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/currencies"/>
+            </TableRow>
+            <TableRow
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/ltc_threshold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:labelFor="@+id/ltcThresholdEditText"/>
+                <EditText
+                    android:id="@+id/ltcThresholdEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:layout_weight="1"/>
+
+                <Spinner
+                    android:id="@+id/ltcThresholdCurrencySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/currencies"/>
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+</RelativeLayout>
