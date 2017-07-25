@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SettingsActivity" />
+
+        <service
+            android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

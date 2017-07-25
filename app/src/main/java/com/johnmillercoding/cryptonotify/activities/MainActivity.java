@@ -1,13 +1,8 @@
 package com.johnmillercoding.cryptonotify.activities;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,8 +19,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.johnmillercoding.cryptonotify.R;
 import com.johnmillercoding.cryptonotify.models.ExchangePrice;
+import com.johnmillercoding.cryptonotify.services.NotificationService;
 import com.johnmillercoding.cryptonotify.utilities.Config;
-import com.johnmillercoding.cryptonotify.utilities.PreferenceManager;
 import com.johnmillercoding.cryptonotify.utilities.VolleyController;
 
 import org.json.JSONException;
@@ -34,8 +29,6 @@ import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -44,10 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Tags
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
-    private final int ETH = 0, LTC = 1, ZEC = 2;
-
-    // Shared prefs
-    private PreferenceManager preferenceManager;
 
     // Cryptocurrencies
     private List<String> coins, exchanges;
@@ -83,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialize(){
 
-        // Initializing SharedPreferences
-        preferenceManager = new PreferenceManager(this);
+        // Starting notification service
+        startService(new Intent(this, NotificationService.class));
 
         // Initializing lists
         coins = new ArrayList<>();
@@ -97,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         zecPrices = new ArrayList<>();
 
         // Configuring TabHost
-        TabHost tabHost = (TabHost) findViewById(R.id.pricesTabHost);
+        TabHost tabHost = findViewById(R.id.pricesTabHost);
         tabHost.setup();
 
         // Looping through coins
@@ -182,136 +171,14 @@ public class MainActivity extends AppCompatActivity {
                 catch (JSONException e) {
                     Log.d(LOG_TAG, "JSON ERROR: " + e.getMessage());
                 }
-                finally {
-                    // Send notifications
-                    if (last){
-                        sendNotifications();
-                    }
-                }
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d(LOG_TAG, "VOLLEY ERROR -- COIN: " + coin + " Exchange: " + exchange + " ERROR: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), "We're sorry! We could not retrieve data from the servers.", Toast.LENGTH_LONG).show();  // TODO only if activity in focus
             }
         });
         VolleyController.getInstance().addToRequestQueue(strReq, requestString);
-    }
-
-    private void sendNotifications(){
-
-        // Checking if notifications are enabled
-        if (preferenceManager.allNotificationsEnabled()){
-
-            // Check each notification
-            if (preferenceManager.ethNotificationsEnabled()){
-                if (preferenceManager.getEthCurrency().equals("USD")){
-                    Collections.sort(ethPrices, new Comparator<ExchangePrice>() {
-                        @Override
-                        public int compare(ExchangePrice e1, ExchangePrice e2) {
-                            return Double.compare(e1.getUsdValue(), e2.getUsdValue());
-                        }
-                    });
-                    if (preferenceManager.getEthThreshold().isEmpty() || zecPrices.get(0).getUsdValue() <= Double.parseDouble(preferenceManager.getEthThreshold())) {
-                        notification(ETH, ethPrices.get(0).getCoin() + " Alert!", ethPrices.get(0).getCoin() + " is now $" + ethPrices.get(0).getUsdValue() + "!!!");
-                    }
-                }
-                else{
-                    Collections.sort(ethPrices, new Comparator<ExchangePrice>() {
-                        @Override
-                        public int compare(ExchangePrice e1, ExchangePrice e2) {
-                            return Double.compare(e1.getBtcValue(), e2.getBtcValue());
-                        }
-                    });
-                    if (preferenceManager.getEthThreshold().isEmpty() || zecPrices.get(0).getBtcValue() <= Double.parseDouble(preferenceManager.getEthThreshold())) {
-                        notification(ETH, ethPrices.get(0).getCoin() + " Alert!", ethPrices.get(0).getCoin() + " is now " + ethPrices.get(0).getBtcValue() + "BTC!!!");
-                    }
-                }
-            }
-            if (preferenceManager.ltcNotificationsEnabled()){
-                if (preferenceManager.getLtcCurrency().equals("USD")){
-                    Collections.sort(ltcPrices, new Comparator<ExchangePrice>() {
-                        @Override
-                        public int compare(ExchangePrice e1, ExchangePrice e2) {
-                            return Double.compare(e1.getUsdValue(), e2.getUsdValue());
-                        }
-                    });
-                    if (preferenceManager.getLtcThreshold().isEmpty() || ltcPrices.get(0).getUsdValue() <= Double.parseDouble(preferenceManager.getLtcThreshold())) {
-                        notification(LTC, ltcPrices.get(0).getCoin() + " Alert!", ltcPrices.get(0).getCoin() + " is now $" + ltcPrices.get(0).getUsdValue() + "!!!");
-                    }
-                }
-                else{
-                    Collections.sort(ltcPrices, new Comparator<ExchangePrice>() {
-                        @Override
-                        public int compare(ExchangePrice e1, ExchangePrice e2) {
-                            return Double.compare(e1.getBtcValue(), e2.getBtcValue());
-                        }
-                    });
-                    if (preferenceManager.getLtcThreshold().isEmpty() || ltcPrices.get(0).getBtcValue() <= Double.parseDouble(preferenceManager.getLtcThreshold())) {
-                        notification(LTC, ltcPrices.get(0).getCoin() + " Alert!", ltcPrices.get(0).getCoin() + " is now " + ltcPrices.get(0).getBtcValue() + "BTC!!!");
-                    }
-                }
-            }
-            if (preferenceManager.zecNotificationsEnabled()){
-                if (preferenceManager.getZecCurrency().equals("USD")){
-                    Collections.sort(zecPrices, new Comparator<ExchangePrice>() {
-                        @Override
-                        public int compare(ExchangePrice e1, ExchangePrice e2) {
-                            return Double.compare(e1.getUsdValue(), e2.getUsdValue());
-                        }
-                    });
-                    if (preferenceManager.getZecThreshold().isEmpty() || zecPrices.get(0).getUsdValue() <= Double.parseDouble(preferenceManager.getZecThreshold())) {
-                        notification(ZEC, zecPrices.get(0).getCoin() + " Alert!", zecPrices.get(0).getCoin() + " is now $" + zecPrices.get(0).getUsdValue() + "!!!");
-                    }
-                }
-                else{
-                    Collections.sort(zecPrices, new Comparator<ExchangePrice>() {
-                        @Override
-                        public int compare(ExchangePrice e1, ExchangePrice e2) {
-                            return Double.compare(e1.getBtcValue(), e2.getBtcValue());
-                        }
-                    });
-                    if (preferenceManager.getZecThreshold().isEmpty() || zecPrices.get(0).getBtcValue() <= Double.parseDouble(preferenceManager.getZecThreshold())) {
-                        notification(ZEC, zecPrices.get(0).getCoin() + " Alert!", zecPrices.get(0).getCoin() + " is now " + zecPrices.get(0).getBtcValue() + "BTC!!!");
-                    }
-                }
-            }
-        }
-    }
-
-    // TODO modify
-    private void notification(int id, String title, String text){
-        NotificationCompat.Builder mBuilder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.notification_icon)
-                        .setContentTitle(title)
-                        .setContentText(text);
-
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(MainActivity.class);
-
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-        mNotificationManager.notify(id, mBuilder.build());
     }
 }

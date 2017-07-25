@@ -37,16 +37,16 @@ public class SettingsActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(this);
 
         // Initializing UI components
-        allNotifications = (Switch) findViewById(R.id.allNotificationsSwitch);
-        ethNotifications = (Switch) findViewById(R.id.ethNotificationsSwitch);
-        zecNotifications = (Switch) findViewById(R.id.zecNotificationsSwitch);
-        ltcNotifications = (Switch) findViewById(R.id.ltcNotificationsSwitch);
-        ethThreshold = (EditText) findViewById(R.id.ethThresholdEditText);
-        zecThreshold = (EditText) findViewById(R.id.zecThresholdEditText);
-        ltcThreshold = (EditText) findViewById(R.id.ltcThresholdEditText);
-        ethThresholdCurrencySpinner = (Spinner) findViewById(R.id.ethThresholdCurrencySpinner);
-        zecThresholdCurrencySpinner = (Spinner) findViewById(R.id.zecThresholdCurrencySpinner);
-        ltcThresholdCurrencySpinner = (Spinner) findViewById(R.id.ltcThresholdCurrencySpinner);
+        allNotifications = findViewById(R.id.allNotificationsSwitch);
+        ethNotifications = findViewById(R.id.ethNotificationsSwitch);
+        zecNotifications = findViewById(R.id.zecNotificationsSwitch);
+        ltcNotifications = findViewById(R.id.ltcNotificationsSwitch);
+        ethThreshold = findViewById(R.id.ethThresholdEditText);
+        zecThreshold = findViewById(R.id.zecThresholdEditText);
+        ltcThreshold = findViewById(R.id.ltcThresholdEditText);
+        ethThresholdCurrencySpinner = findViewById(R.id.ethThresholdCurrencySpinner);
+        zecThresholdCurrencySpinner = findViewById(R.id.zecThresholdCurrencySpinner);
+        ltcThresholdCurrencySpinner = findViewById(R.id.ltcThresholdCurrencySpinner);
 
         // Listeners
         allNotifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
