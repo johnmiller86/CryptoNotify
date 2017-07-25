@@ -1,46 +1,51 @@
 package com.johnmillercoding.cryptonotify.models;
 
-public class ExchangePrice {
+/**
+ * Class to model an exchange request.
+ */
+public class ExchangeRequest {
 
     // Class vars
     private final String coin, exchange;
     private final double btcValue, usdValue;
 
-    public ExchangePrice(String coin, String exchange, double btcValue, double usdValue){
+    // Constructor
+    public ExchangeRequest(String coin, String exchange, double btcValue, double usdValue){
         this.coin = coin;
         this.exchange = exchange;
         this.btcValue = btcValue;
         this.usdValue = usdValue;
     }
+
+    /**
+     * Gets the crypto coin.
+     * @return the coin.
+     */
     public String getCoin() {
         return coin;
     }
 
-//    public void setCoin(String coin) {
-//        this.coin = coin;
-//    }
-
+    /**
+     * Gets the exchange.
+     * @return the exchange.
+     */
     public String getExchange() {
         return exchange;
     }
 
-//    public void setExchange(String exchange) {
-//        this.exchange = exchange;
-//    }
-
+    /**
+     * Gets the value in Bitcoin.
+     * @return the value in BTC.
+     */
     public double getBtcValue() {
         return btcValue;
     }
 
-//    public void setBtcValue(double btcValue) {
-//        this.btcValue = btcValue;
-//    }
-
+    /**
+     * Gets the value in U.S. dollars.
+     * @return the value in USD.
+     */
     public double getUsdValue() {
         return usdValue;
     }
-
-//    public void setUsdValue(double usdValue) {
-//        this.usdValue = usdValue;
-//    }
 }

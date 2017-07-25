@@ -18,7 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.johnmillercoding.cryptonotify.R;
-import com.johnmillercoding.cryptonotify.models.ExchangePrice;
+import com.johnmillercoding.cryptonotify.models.ExchangeRequest;
 import com.johnmillercoding.cryptonotify.services.NotificationService;
 import com.johnmillercoding.cryptonotify.utilities.Config;
 import com.johnmillercoding.cryptonotify.utilities.VolleyController;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     // Cryptocurrencies
     private List<String> coins, exchanges;
     private HashMap<String, ArrayAdapter<String>> arrayAdapters;
-    private List<ExchangePrice> ethPrices, ltcPrices, zecPrices;
+    private List<ExchangeRequest> ethPrices, ltcPrices, zecPrices;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         initialize();
     }
 
+    /**
+     * Initializes the UI and components.
+     */
     private void initialize(){
 
         // Starting notification service
@@ -122,25 +125,28 @@ public class MainActivity extends AppCompatActivity {
         getPrices();
     }
 
+    /**
+     * Gets the pricing information for each coin at each exchange.
+     */
     private void getPrices(){
 
-        boolean last = false;
         Toast.makeText(this, "Getting Prices", Toast.LENGTH_LONG).show();
         for (int i = 0; i < coins.size(); i++) {
             for (int j = 0; j < exchanges.size(); j++){
 
-                // Check if last request because requests are async
-                if (i == coins.size() - 1 && j == exchanges.size() - 1){
-                    last = true;
-                }
-
                 // Request price
-                requestPrice(coins.get(i).toUpperCase(), "BTC,USD", exchanges.get(j), last);
+                requestPrice(coins.get(i).toUpperCase(), "BTC,USD", exchanges.get(j));
             }
         }
     }
 
-    private void requestPrice(final String coin, final String conversions, final String exchange, final boolean last){
+    /**
+     * Requests coin pricing from various exchanges.
+     * @param coin the crypto coin.
+     * @param conversions the preferred values.
+     * @param exchange the exchange to request pricing from.
+     */
+    private void requestPrice(final String coin, final String conversions, final String exchange){
         final String requestString = "get_price";
         String uri = Config.URL_PRICE + "?fsym=" + coin + "&tsyms=" + conversions + "&e=" + exchange;
         StringRequest strReq = new StringRequest(Request.Method.GET, uri, new Response.Listener<String>() {
@@ -157,13 +163,13 @@ public class MainActivity extends AppCompatActivity {
                     // Adding to exchange list
                     switch (coin.toUpperCase()){
                         case "ETH":
-                            ethPrices.add(new ExchangePrice(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
+                            ethPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
                             break;
                         case "LTC":
-                            ltcPrices.add(new ExchangePrice(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
+                            ltcPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
                             break;
                         case "ZEC":
-                            zecPrices.add(new ExchangePrice(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
+                            zecPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
                             break;
                     }
                 }
