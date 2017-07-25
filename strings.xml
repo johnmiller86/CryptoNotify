@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Crypto Notify</string>
+    <string name="ltc">LTC</string>
+    <string name="zec">ZEC</string>
+    <string name="eth">ETH</string>
+    <string name="all_notifications">All Notifications</string>
+    <string name="notifications">Notifications</string>
+    <string name="ltc_threshold">LTC Threshold</string>
+    <string name="zec_threshold">ZEC Threshold</string>
+    <string name="eth_threshold">ETH Threshold</string>
+    <string name="notify_me_when_price_drops_below">Notify Me When Price Drops Below</string>
+    <string name="settings">Settings</string>
+    <string name="current_prices">Current Prices</string>
+    <string-array name="exchanges">
+        <item>BitBay</item>
+        <item>Bitfinex</item>
+        <item>Bitstamp</item>
+        <item>BTCE</item>
+        <!--<item>CCEDK</item>-->
+        <!--<item>Cexio</item>-->
+        <item>Coinbase</item>
+        <!--<item>Cryptsy</item>-->
+        <item>Gatecoin</item>
+        <item>Gemini</item>
+        <item>HitBTC</item>
+        <item>Kraken</item>
+        <item>LiveCoin</item>
+        <item>Poloniex</item>
+        <item>Quoine</item>
+        <item>TheRockTrading</item>
+        <item>Yobit</item>
+        <!--<item>BTER</item>-->
+        <!--<item>BTC38</item>-->
+        <!--<item>BTCC</item>-->
+        <!--<item>Bit2C</item>-->
+        <!--<item>Bittrex</item>-->
+        <!--<item>Coinfloor</item>-->
+        <!--<item>Coinse</item>-->
+        <!--<item>Coinsetter</item>-->
+        <!--<item>Cryptopia</item>-->
+        <!--<item>Huobi</item>-->
+        <!--<item>itBit</item>-->
+        <!--<item>LakeBTC</item>-->
+        <!--<item>LocalBitcoins</item>-->
+        <!--<item>MonetaGo</item>-->
+        <!--<item>OKCoin</item>-->
+        <!--<item>Yacuna</item>-->
+        <!--<item>Yunbi</item>-->
+        <!--<item>Korbit</item>-->
+        <!--<item>BTCMarkets</item>-->
+        <!--<item>QuadrigaCX</item>-->
+        <!--<item>CoinCheck</item>-->
+        <!--<item>BitSquare</item>-->
+        <!--<item>Vaultoro</item>-->
+        <!--<item>MercadoBitcoin</item>-->
+        <!--<item>Unocoin</item>-->
+        <!--<item>Bitso</item>-->
+        <!--<item>BTCXIndia</item>-->
+        <!--<item>Paymium</item>-->
+        <!--<item>bitFlyer</item>-->
+        <!--<item>Luno</item>-->
+        <!--<item>EtherDelta</item>-->
+        <!--<item>Liqui</item>-->
+        <!--<item>bitFlyerFX</item>-->
+        <!--<item>BitMarket</item>-->
+        <!--<item>Coinone</item>-->
+        <!--<item>Tidex</item>-->
+        <!--<item>Bleutrade</item>-->
+        <!--<item>EthexIndia </item>-->
+        <!--<item>GDAX</item>-->
+        <!--<item>CCAGG</item>-->
+    </string-array>
+    <string-array name="currencies">
+        <item>USD</item>
+        <item>BTC</item>
+    </string-array>
+</resources>
