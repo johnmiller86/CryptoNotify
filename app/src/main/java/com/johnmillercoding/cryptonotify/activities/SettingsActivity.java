@@ -1,7 +1,7 @@
 package com.johnmillercoding.cryptonotify.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,7 +13,7 @@ import android.widget.Switch;
 import com.johnmillercoding.cryptonotify.R;
 import com.johnmillercoding.cryptonotify.utilities.PreferenceManager;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
 
     private EditText ethThreshold, zecThreshold, ltcThreshold;
 

@@ -1,8 +1,8 @@
 package com.johnmillercoding.cryptonotify.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +20,7 @@ import com.johnmillercoding.cryptonotify.R;
 import com.johnmillercoding.cryptonotify.models.ListViewAdapter;
 import com.johnmillercoding.cryptonotify.services.NotificationService;
 import com.johnmillercoding.cryptonotify.utilities.Config;
+import com.johnmillercoding.cryptonotify.utilities.PreferenceManager;
 import com.johnmillercoding.cryptonotify.utilities.VolleyController;
 
 import org.json.JSONException;
@@ -28,6 +29,8 @@ import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,10 +40,13 @@ import static com.johnmillercoding.cryptonotify.models.ListViewAdapter.BTC_PRICE
 import static com.johnmillercoding.cryptonotify.models.ListViewAdapter.EXCHANGE;
 import static com.johnmillercoding.cryptonotify.models.ListViewAdapter.USD_PRICE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     // Tags
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
+
+    // Shared prefs
+    private PreferenceManager preferenceManager;
 
     // Lists
     private List<String> coins, exchanges;
@@ -80,12 +86,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initialize(){
 
+        // Initializing SharedPreferences
+        preferenceManager = new PreferenceManager(this);
+
         // Starting notification service
         startService(new Intent(this, NotificationService.class));
 
         // Initializing lists
         coins = new ArrayList<>();
-        /*coins.add("btc");*/ coins.add("eth"); coins.add("ltc"); coins.add("zec"); // WTF BTC ISN'T WORKING
+        coins.add("eth"); coins.add("ltc"); coins.add("zec");
         exchanges = Arrays.asList(getResources().getStringArray(R.array.exchanges));
         listViews = new HashMap<>();
         ethPrices = new ArrayList<>();
@@ -186,7 +195,10 @@ public class MainActivity extends AppCompatActivity {
                     // Send notifications
                     if (last){
 
-                        // TODO put in sorting of the HashMaps
+                        // Sorting prices
+                        sortMaps(ethPrices, preferenceManager.getEthCurrency());
+                        sortMaps(ltcPrices, preferenceManager.getLtcCurrency());
+                        sortMaps(zecPrices, preferenceManager.getZecCurrency());
 
                         // Configure each ListViewAdapter
                         for (Map.Entry<String, ListView> entry : listViews.entrySet()){
@@ -216,5 +228,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         VolleyController.getInstance().addToRequestQueue(strReq, requestString);
+    }
+
+    private static void sortMaps(ArrayList<HashMap<String, String>> maps, final String sortCurrency) {
+        Collections.sort(maps, new Comparator<HashMap<String, String>>() {
+            @Override
+            public int compare(HashMap<String, String> h1, HashMap<String, String> h2) {
+
+                if (sortCurrency.equals("USD")) {
+                    return Double.compare(Double.valueOf(h1.get(USD_PRICE).replace("$", "")), Double.valueOf(h2.get(USD_PRICE).replace("$", "")));
+                }
+                else {
+                    return Double.compare(Double.valueOf(h1.get(BTC_PRICE).replace("BTC", "")), Double.valueOf(h2.get(BTC_PRICE).replace("BTC", "")));
+                }
+            }
+        });
     }
 }
