@@ -67,6 +67,7 @@
             </TableRow>
         </TableLayout>
     </RelativeLayout>
+    <!-- TODO put in Notification Interval Settings -->
     <LinearLayout
         android:id="@+id/verticalDivider"
         android:orientation="horizontal"

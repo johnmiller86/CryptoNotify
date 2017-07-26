@@ -15,10 +15,7 @@ import com.johnmillercoding.cryptonotify.utilities.PreferenceManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    // UI components
-    private Switch allNotifications, ethNotifications, zecNotifications, ltcNotifications;
     private EditText ethThreshold, zecThreshold, ltcThreshold;
-    private Spinner ethThresholdCurrencySpinner, zecThresholdCurrencySpinner, ltcThresholdCurrencySpinner;
 
     // Shared prefs
     private PreferenceManager preferenceManager;
@@ -37,16 +34,16 @@ public class SettingsActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(this);
 
         // Initializing UI components
-        allNotifications = findViewById(R.id.allNotificationsSwitch);
-        ethNotifications = findViewById(R.id.ethNotificationsSwitch);
-        zecNotifications = findViewById(R.id.zecNotificationsSwitch);
-        ltcNotifications = findViewById(R.id.ltcNotificationsSwitch);
+        Switch allNotifications = findViewById(R.id.allNotificationsSwitch);
+        Switch ethNotifications = findViewById(R.id.ethNotificationsSwitch);
+        Switch zecNotifications = findViewById(R.id.zecNotificationsSwitch);
+        Switch ltcNotifications = findViewById(R.id.ltcNotificationsSwitch);
         ethThreshold = findViewById(R.id.ethThresholdEditText);
         zecThreshold = findViewById(R.id.zecThresholdEditText);
         ltcThreshold = findViewById(R.id.ltcThresholdEditText);
-        ethThresholdCurrencySpinner = findViewById(R.id.ethThresholdCurrencySpinner);
-        zecThresholdCurrencySpinner = findViewById(R.id.zecThresholdCurrencySpinner);
-        ltcThresholdCurrencySpinner = findViewById(R.id.ltcThresholdCurrencySpinner);
+        Spinner ethThresholdCurrencySpinner = findViewById(R.id.ethThresholdCurrencySpinner);
+        Spinner zecThresholdCurrencySpinner = findViewById(R.id.zecThresholdCurrencySpinner);
+        Spinner ltcThresholdCurrencySpinner = findViewById(R.id.ltcThresholdCurrencySpinner);
 
         // Listeners
         allNotifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -153,8 +150,10 @@ public class SettingsActivity extends AppCompatActivity {
         ethThreshold.setText(preferenceManager.getEthThreshold());
         zecThreshold.setText(preferenceManager.getZecThreshold());
         ltcThreshold.setText(preferenceManager.getLtcThreshold());
-        ethThresholdCurrencySpinner.setSelection(((ArrayAdapter<String>)ethThresholdCurrencySpinner.getAdapter()).getPosition(preferenceManager.getEthCurrency()));
-        zecThresholdCurrencySpinner.setSelection(((ArrayAdapter<String>)zecThresholdCurrencySpinner.getAdapter()).getPosition(preferenceManager.getZecCurrency()));
-        ltcThresholdCurrencySpinner.setSelection(((ArrayAdapter<String>)ltcThresholdCurrencySpinner.getAdapter()).getPosition(preferenceManager.getLtcCurrency()));
+        ethThresholdCurrencySpinner.setSelection(((ArrayAdapter<String>) ethThresholdCurrencySpinner.getAdapter()).getPosition(preferenceManager.getEthCurrency()));
+        zecThresholdCurrencySpinner.setSelection(((ArrayAdapter<String>) zecThresholdCurrencySpinner.getAdapter()).getPosition(preferenceManager.getZecCurrency()));
+        ltcThresholdCurrencySpinner.setSelection(((ArrayAdapter<String>) ltcThresholdCurrencySpinner.getAdapter()).getPosition(preferenceManager.getLtcCurrency()));
+
+        // TODO Add Notification Interval Settings
     }
 }

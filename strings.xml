@@ -1,3 +1,4 @@
+<!--suppress XmlUnboundNsPrefix, XmlUnboundNsPrefix -->
 <resources>
     <string name="app_name">Crypto Notify</string>
     <string name="ltc">LTC</string>

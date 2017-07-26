@@ -100,4 +100,6 @@ public class PreferenceManager {
     public String getZecCurrency(){ return sharedPreferences.getString(ZEC_CURRENCY, "USD"); }
 
     public String getLtcCurrency(){ return sharedPreferences.getString(LTC_CURRENCY, "USD"); }
+
+    // TODO Add Notification Interval Settings
 }
