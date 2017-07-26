@@ -230,7 +230,7 @@ public class MainActivity extends Activity {
         VolleyController.getInstance().addToRequestQueue(strReq, requestString);
     }
 
-    private static void sortMaps(ArrayList<HashMap<String, String>> maps, final String sortCurrency) {
+    private void sortMaps(ArrayList<HashMap<String, String>> maps, final String sortCurrency) {
         Collections.sort(maps, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> h1, HashMap<String, String> h2) {
