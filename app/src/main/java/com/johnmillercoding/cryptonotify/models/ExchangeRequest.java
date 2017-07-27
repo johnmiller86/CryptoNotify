@@ -6,13 +6,14 @@ package com.johnmillercoding.cryptonotify.models;
 public class ExchangeRequest {
 
     // Class vars
-    private final String coin, exchange;
+    private final String coin, exchange, url;
     private final double btcValue, usdValue;
 
     // Constructor
-    public ExchangeRequest(String coin, String exchange, double btcValue, double usdValue){
+    public ExchangeRequest(String coin, String exchange, String url, double btcValue, double usdValue){
         this.coin = coin;
         this.exchange = exchange;
+        this.url = url;
         this.btcValue = btcValue;
         this.usdValue = usdValue;
     }
@@ -32,6 +33,12 @@ public class ExchangeRequest {
     public String getExchange() {
         return exchange;
     }
+
+    /**
+     * Gets the url.
+     * @return the url.
+     */
+    public String getUrl(){ return url; }
 
     /**
      * Gets the value in Bitcoin.

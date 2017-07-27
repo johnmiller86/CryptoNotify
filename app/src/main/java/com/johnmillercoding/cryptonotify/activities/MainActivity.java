@@ -2,12 +2,14 @@ package com.johnmillercoding.cryptonotify.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -49,7 +51,7 @@ public class MainActivity extends Activity {
     private PreferenceManager preferenceManager;
 
     // Lists
-    private List<String> coins, exchanges;
+    private List<String> coins, exchanges, urls;
     private HashMap<String, ListView> listViews;
     private ArrayList<HashMap<String, String>> ethPrices, ltcPrices, zecPrices;
 
@@ -96,6 +98,7 @@ public class MainActivity extends Activity {
         coins = new ArrayList<>();
         coins.add("eth"); coins.add("ltc"); coins.add("zec");
         exchanges = Arrays.asList(getResources().getStringArray(R.array.exchanges));
+        urls = Arrays.asList(getResources().getStringArray(R.array.urls));
         listViews = new HashMap<>();
         ethPrices = new ArrayList<>();
         ltcPrices = new ArrayList<>();
@@ -115,6 +118,28 @@ public class MainActivity extends Activity {
             // Configuring ListView and ArrayAdapter
             final ListView listView = new ListView(this);
             listView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+
+            // Configuring ListView OnItemClickListener
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    // Associating url
+                    String exchange = ((HashMap<String, String>) parent.getItemAtPosition(position)).get(EXCHANGE);
+                    String url = "";
+                    for (int i = 0; i < exchanges.size(); i++){
+                        if (exchanges.get(i).toUpperCase().equals(exchange)){
+                            url = urls.get(i);
+                        }
+                    }
+
+                    // Configuring Intent
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
 
             // Set TabSpec content to the new ListView
             currencyTab.setContent(new TabHost.TabContentFactory() {

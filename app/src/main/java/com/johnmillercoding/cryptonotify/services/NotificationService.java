@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -51,7 +52,7 @@ public class NotificationService extends Service {
     private PreferenceManager preferenceManager;
 
     // Cryptocurrencies
-    private List<String> coins, exchanges;
+    private List<String> coins, exchanges, urls;
     private List<ExchangeRequest> ethPrices, ltcPrices, zecPrices;
 
     public NotificationService() {
@@ -80,6 +81,7 @@ public class NotificationService extends Service {
         coins = new ArrayList<>();
         coins.add("eth"); coins.add("ltc"); coins.add("zec");
         exchanges = Arrays.asList(getResources().getStringArray(R.array.exchanges));
+        urls = Arrays.asList(getResources().getStringArray(R.array.urls));
         ethPrices = new ArrayList<>();
         ltcPrices = new ArrayList<>();
         zecPrices = new ArrayList<>();
@@ -125,7 +127,7 @@ public class NotificationService extends Service {
                 }
 
                 // Request price
-                requestPrice(coins.get(i).toUpperCase(), exchanges.get(j), last);
+                requestPrice(coins.get(i).toUpperCase(), exchanges.get(j), urls.get(j), last);
             }
         }
     }
@@ -136,7 +138,7 @@ public class NotificationService extends Service {
      * @param exchange the exchange to request pricing from.
      * @param last last request flag used to determine the asynchronous requests have completed.
      */
-    private void requestPrice(final String coin, final String exchange, final boolean last){
+    private void requestPrice(final String coin, final String exchange, final String url, final boolean last){
         final String requestString = "get_price";
         String uri = Config.URL_PRICE + "?fsym=" + coin + "&tsyms=BTC,USD&e=" + exchange;
         StringRequest strReq = new StringRequest(Request.Method.GET, uri, new Response.Listener<String>() {
@@ -148,13 +150,13 @@ public class NotificationService extends Service {
                     // Adding to exchange list
                     switch (coin.toUpperCase()){
                         case "ETH":
-                            ethPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
+                            ethPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), url, jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
                             break;
                         case "LTC":
-                            ltcPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
+                            ltcPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), url, jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
                             break;
                         case "ZEC":
-                            zecPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
+                            zecPrices.add(new ExchangeRequest(coin, exchange.toUpperCase(), url, jsonObject.getDouble("BTC"), jsonObject.getDouble("USD")));
                             break;
                     }
                 }
@@ -200,7 +202,7 @@ public class NotificationService extends Service {
                         }
                     });
                     if (preferenceManager.getEthThreshold().isEmpty() || zecPrices.get(0).getUsdValue() <= Double.parseDouble(preferenceManager.getEthThreshold())) {
-                        notification(ETH, ethPrices.get(0).getCoin() + " Alert!", ethPrices.get(0).getCoin() + " is now $" + ethPrices.get(0).getUsdValue() + " on " + ethPrices.get(0).getExchange() +"!!!");
+                        notification(ETH, ethPrices.get(0).getCoin() + " Alert!", ethPrices.get(0).getCoin() + " is now $" + ethPrices.get(0).getUsdValue() + " on " + ethPrices.get(0).getExchange() +"!!!", ethPrices.get(0).getUrl());
                     }
                 }
                 // BTC
@@ -212,7 +214,7 @@ public class NotificationService extends Service {
                         }
                     });
                     if (preferenceManager.getEthThreshold().isEmpty() || zecPrices.get(0).getBtcValue() <= Double.parseDouble(preferenceManager.getEthThreshold())) {
-                        notification(ETH, ethPrices.get(0).getCoin() + " Alert!", ethPrices.get(0).getCoin() + " is now " + ethPrices.get(0).getBtcValue() + "BTC on " + ethPrices.get(0).getExchange() + "!!!");
+                        notification(ETH, ethPrices.get(0).getCoin() + " Alert!", ethPrices.get(0).getCoin() + " is now " + ethPrices.get(0).getBtcValue() + "BTC on " + ethPrices.get(0).getExchange() + "!!!", ethPrices.get(0).getUrl());
                     }
                 }
             }
@@ -228,7 +230,7 @@ public class NotificationService extends Service {
                         }
                     });
                     if (preferenceManager.getLtcThreshold().isEmpty() || ltcPrices.get(0).getUsdValue() <= Double.parseDouble(preferenceManager.getLtcThreshold())) {
-                        notification(LTC, ltcPrices.get(0).getCoin() + " Alert!", ltcPrices.get(0).getCoin() + " is now $" + ltcPrices.get(0).getUsdValue() + " on " + ltcPrices.get(0).getExchange() + "!!!");
+                        notification(LTC, ltcPrices.get(0).getCoin() + " Alert!", ltcPrices.get(0).getCoin() + " is now $" + ltcPrices.get(0).getUsdValue() + " on " + ltcPrices.get(0).getExchange() + "!!!", ltcPrices.get(0).getUrl());
                     }
                 }
                 // BTC
@@ -240,7 +242,7 @@ public class NotificationService extends Service {
                         }
                     });
                     if (preferenceManager.getLtcThreshold().isEmpty() || ltcPrices.get(0).getBtcValue() <= Double.parseDouble(preferenceManager.getLtcThreshold())) {
-                        notification(LTC, ltcPrices.get(0).getCoin() + " Alert!", ltcPrices.get(0).getCoin() + " is now " + ltcPrices.get(0).getBtcValue() + "BTC on " + ltcPrices.get(0).getExchange() + "!!!");
+                        notification(LTC, ltcPrices.get(0).getCoin() + " Alert!", ltcPrices.get(0).getCoin() + " is now " + ltcPrices.get(0).getBtcValue() + "BTC on " + ltcPrices.get(0).getExchange() + "!!!", ltcPrices.get(0).getUrl());
                     }
                 }
             }
@@ -256,7 +258,7 @@ public class NotificationService extends Service {
                         }
                     });
                     if (preferenceManager.getZecThreshold().isEmpty() || zecPrices.get(0).getUsdValue() <= Double.parseDouble(preferenceManager.getZecThreshold())) {
-                        notification(ZEC, zecPrices.get(0).getCoin() + " Alert!", zecPrices.get(0).getCoin() + " is now $" + zecPrices.get(0).getUsdValue() + " on " + zecPrices.get(0).getExchange() +"!!!");
+                        notification(ZEC, zecPrices.get(0).getCoin() + " Alert!", zecPrices.get(0).getCoin() + " is now $" + zecPrices.get(0).getUsdValue() + " on " + zecPrices.get(0).getExchange() +"!!!", zecPrices.get(0).getUrl());
                     }
                 }
                 // BTC
@@ -268,7 +270,7 @@ public class NotificationService extends Service {
                         }
                     });
                     if (preferenceManager.getZecThreshold().isEmpty() || zecPrices.get(0).getBtcValue() <= Double.parseDouble(preferenceManager.getZecThreshold())) {
-                        notification(ZEC, zecPrices.get(0).getCoin() + " Alert!", zecPrices.get(0).getCoin() + " is now " + zecPrices.get(0).getBtcValue() + "BTC on " + ethPrices.get(0).getExchange() + "!!!");
+                        notification(ZEC, zecPrices.get(0).getCoin() + " Alert!", zecPrices.get(0).getCoin() + " is now " + zecPrices.get(0).getBtcValue() + "BTC on " + ethPrices.get(0).getExchange() + "!!!", zecPrices.get(0).getUrl());
                     }
                 }
             }
@@ -281,14 +283,17 @@ public class NotificationService extends Service {
      * @param title the notification title.
      * @param text the notification description.
      */
-    private void notification(int id, String title, String text){
+    private void notification(int id, String title, String text, String url){
 
         // Configuring NotificationBuilder
-        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this).setSmallIcon(R.drawable.notification_icon).setContentTitle(title).setContentText(text);
+        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this).setSmallIcon(R.drawable.notification_icon).setContentTitle(title).setContentText(text).setAutoCancel(true);
 
         // Intent to launch from the notification
-        Intent intent = new Intent(this, MainActivity.class);
+//        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
 
+        // TODO mess with this
         // Creates the back stack
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
 
@@ -301,9 +306,9 @@ public class NotificationService extends Service {
         builder.setContentIntent(resultPendingIntent);
 
         // Getting the system notification service
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Building the notification
-        mNotificationManager.notify(id, builder.build());
+        notificationManager.notify(id, builder.build());
     }
 }
