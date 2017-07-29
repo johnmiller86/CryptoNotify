@@ -43,8 +43,6 @@ public class NotificationService extends Service {
     // Tags
     private final String LOG_TAG = NotificationService.this.getClass().getSimpleName();
 
-    // Service stuff
-    private final int MILLISECONDS = 300000;  // 5 minutes for now
     private final Handler handler = new Handler();
     private Timer timer = null;
 
@@ -77,6 +75,9 @@ public class NotificationService extends Service {
         // Initializing SharedPreferences
         preferenceManager = new PreferenceManager(this);
 
+        // Initializing interval
+        int notificationInterval = getNotificationInterval();
+
         // Initializing lists
         coins = new ArrayList<>();
         coins.add("eth"); coins.add("ltc"); coins.add("zec");
@@ -93,7 +94,7 @@ public class NotificationService extends Service {
             timer = new Timer();
 
         // Starting the notification service
-        timer.scheduleAtFixedRate(new Notify(), 0, MILLISECONDS);
+        timer.scheduleAtFixedRate(new Notify(), 0, notificationInterval);
     }
 
     /**
@@ -109,6 +110,19 @@ public class NotificationService extends Service {
                     getPrices();
                 }
             });
+        }
+    }
+
+    private int getNotificationInterval(){
+
+        switch (preferenceManager.getNotificationUnit()){
+
+            case "Minutes":
+                return preferenceManager.getNotificationInterval() * 60000;
+            case "Hours":
+                return preferenceManager.getNotificationInterval() * 3600000;
+            default:
+                return preferenceManager.getNotificationInterval() * 25200000;
         }
     }
 

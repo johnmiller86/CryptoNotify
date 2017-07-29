@@ -2,6 +2,8 @@ package com.johnmillercoding.cryptonotify.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,7 @@ import com.johnmillercoding.cryptonotify.R;
 import com.johnmillercoding.cryptonotify.models.ListViewAdapter;
 import com.johnmillercoding.cryptonotify.services.NotificationService;
 import com.johnmillercoding.cryptonotify.utilities.Config;
+import com.johnmillercoding.cryptonotify.utilities.NetworkReceiver;
 import com.johnmillercoding.cryptonotify.utilities.PreferenceManager;
 import com.johnmillercoding.cryptonotify.utilities.VolleyController;
 
@@ -42,7 +45,10 @@ import static com.johnmillercoding.cryptonotify.models.ListViewAdapter.BTC_PRICE
 import static com.johnmillercoding.cryptonotify.models.ListViewAdapter.EXCHANGE;
 import static com.johnmillercoding.cryptonotify.models.ListViewAdapter.USD_PRICE;
 
-public class MainActivity extends Activity {
+/**
+ * Main Activity user interface.
+ */
+public class MainActivity extends Activity implements NetworkReceiver.NetworkStateReceiverListener {
 
     // Tags
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
@@ -91,6 +97,11 @@ public class MainActivity extends Activity {
         // Initializing SharedPreferences
         preferenceManager = new PreferenceManager(this);
 
+        // Configuring NetworkReceiver
+        NetworkReceiver networkReceiver = new NetworkReceiver();
+        networkReceiver.addListener(this);
+        registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
         // Starting notification service
         startService(new Intent(this, NotificationService.class));
 
@@ -126,7 +137,7 @@ public class MainActivity extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     // Associating url
-                    String exchange = ((HashMap<String, String>) parent.getItemAtPosition(position)).get(EXCHANGE);
+                    @SuppressWarnings("unchecked") String exchange = ((HashMap<String, String>) parent.getItemAtPosition(position)).get(EXCHANGE);
                     String url = "";
                     for (int i = 0; i < exchanges.size(); i++){
                         if (exchanges.get(i).toUpperCase().equals(exchange)){
@@ -268,5 +279,13 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    public void networkAvailable() {}
+
+    @Override
+    public void networkUnavailable() {
+        Toast.makeText(this, "No connection!", Toast.LENGTH_SHORT).show();
     }
 }

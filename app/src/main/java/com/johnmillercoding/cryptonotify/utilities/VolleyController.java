@@ -7,9 +7,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+/**
+ * Class to handle network request queues.
+ */
 public class VolleyController extends Application {
 
-    // Tag
+    // Request tag
     private static final String TAG = VolleyController.class.getSimpleName();
 
     // The RequestQueue and self instance

@@ -1,5 +1,8 @@
 package com.johnmillercoding.cryptonotify.utilities;
 
+/**
+ * Class containing url configurations for exchange requests.
+ */
 public class Config {
 
     // Host url

@@ -12,6 +12,9 @@ import com.johnmillercoding.cryptonotify.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Custom adapter for ListViews.
+ */
 public class ListViewAdapter extends BaseAdapter {
 
     // Constants

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+// TODO comment this file
 public class PreferenceManager {
 
     // Shared Preferences
@@ -22,6 +23,8 @@ public class PreferenceManager {
     private static final String ETH_CURRENCY = "ethCurrency";
     private static final String ZEC_CURRENCY = "zecCurrency";
     private static final String LTC_CURRENCY = "ltcCurrency";
+    private static final String NOTIFICATION_INTERVAL = "notificationInterval";
+    private static final String NOTIFICATION_UNIT = "notificationUnit";
 
     // Constructor
     public PreferenceManager(Context context) {
@@ -81,6 +84,16 @@ public class PreferenceManager {
         editor.apply();
     }
 
+    public void setNotificationInterval(int interval){
+        editor.putInt(NOTIFICATION_INTERVAL, interval);
+        editor.apply();
+    }
+
+    public void setNotificationUnit(String unit){
+        editor.putString(NOTIFICATION_UNIT, unit);
+        editor.apply();
+    }
+
     public boolean allNotificationsEnabled(){ return sharedPreferences.getBoolean(ALL_NOTIFICATIONS, true); }
 
     public boolean ethNotificationsEnabled(){ return sharedPreferences.getBoolean(ETH_NOTIFICATIONS, true); }
@@ -101,5 +114,7 @@ public class PreferenceManager {
 
     public String getLtcCurrency(){ return sharedPreferences.getString(LTC_CURRENCY, "USD"); }
 
-    // TODO Add Notification Interval Settings
+    public int getNotificationInterval(){ return sharedPreferences.getInt(NOTIFICATION_INTERVAL, 5); }
+
+    public String getNotificationUnit(){ return sharedPreferences.getString(NOTIFICATION_UNIT, "Minutes"); }
 }
